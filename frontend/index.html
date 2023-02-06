@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>
+            Websockets with __
+        </title>
+    </head>
+
+    <body>
+        <div class="center">
+            <h1>amazing chat application</h1>
+            <h3 id="chat-header">Currently in chat: general</h3>
+
+            <form id="chatroom-selection">
+                <label for="chatroom">Chatroom:</label>
+                <input type="text" is="classroom" name="chatroom"><br><br>
+                <input type="submit" value="change chatroom">
+            </form>
+
+            <br>
+
+            <textarea class="messagearea" id="chatmessages" readonly name="chatmessgaes"
+            rows="4" cols="50" placeholder="Welcome to chatroom"></textarea>
+
+            <br>
+
+            <form id="chatroom-message">
+                <label for = "message">Message</label>
+                <input type="text" id = "messsage" name="message"><br><br>
+                <input type="submit" value="send message">
+            </form>
+        </div>
+
+        <script>
+            var selectedchat = "general"
+
+            function changeChatRoom() {
+                var newChat = document.getElementById("chatroom");
+                if(newChat!=null && newChat.value != selectedChat){
+                    console.log(newChat);
+                }
+                return false;
+            }
+
+
+        </script>
+    </body>
+</html>

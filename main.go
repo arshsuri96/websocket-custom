@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import "net/http"
 
 func main() {
-	fmt.Println("Hello")
+	setupAPI()
+}
+
+func setupAPI() {
+	http.Handle("/", http.FileServer(http.Dir("./frontend")))
 }
