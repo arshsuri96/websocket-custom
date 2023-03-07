@@ -9,7 +9,7 @@
 
     <body>
         <div class="center">
-            <h1>amazing chat application</h1>
+            <h1>AMAZING CHAT APPLICATION</h1>
             <h3 id="chat-header">Currently in chat: general</h3>
 
             <form id="chatroom-selection">
@@ -43,7 +43,48 @@
                 return false;
             }
 
+            function sendMessage(){
+                var newmessage = docuemnt.getElementById("message");
+                if (newmessage!=null){
+                    console.log(newmessage);
+                }
+                return false
+            }
+
+            //whenever we land on the first page, we want to open a websocket connection
+            window.onload = function() {
+                document.getElementById("chatroom-selection").onsubmit = changeChatRoom;
+                document.getElementById("chatroom-message").onsubmit = sendMessage;
+
+                if(window["WebSocket"]) {
+                    console.log("supports websockets");
+                    //connecto ws
+                    conn = new WebSocket("ws://" + document.location.host + "/ws");
+                }else{
+                    alert('browser does not')
+                }
+            }
 
         </script>
+
+        <style type="text/css">
+
+            body {
+                overflow : hidden;
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                background : rgb(66, 56, 56)
+            }
+            .center {
+                margin: auto;
+                width : 50%;
+                border : 3px solid green;
+                padding: 10px;
+            }
+
+        </style>
+
     </body>
 </html>
