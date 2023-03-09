@@ -15,9 +15,10 @@ var (
 	}
 )
 
+// maintain the client
 type Manager struct {
-	Clients ClientList
-	sync.RWMutex
+	Clients      ClientList
+	sync.RWMutex //many ppl connecting to the API, we need to protect the API
 }
 
 // factory functions
@@ -36,6 +37,25 @@ func (m *Manager) serverWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	conn.Close()
+	client := NewClient(conn, m)
 
+	m.addClient(client)
+
+}
+func (m *Manager) addClient(client *Client) {
+	m.Lock()
+	defer m.Unlock()
+
+	m.Clients[client] = true
+
+}
+
+func (m *Manager) removeClient(client *Client) {
+	m.Lock()
+	defer m.Unlock()
+
+	if _, ok := m.Clients[client]; ok {
+		client.connection.Close()
+		delete(m.Clients, client)
+	}
 }
