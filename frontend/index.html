@@ -35,6 +35,30 @@
         <script>
             var selectedchat = "general"
 
+            class Event {
+                constructor(type, payload) {
+                    this.type = type ;
+                    this.payload = payload;
+                }
+            }
+
+            function routeEvent(event) {
+                if (event.type == undefined) {
+                    alert('no type field in the event');
+                }
+
+                switch(event.type){
+                    case "new messgae":
+                        console.log("new message")
+                        break;
+                    default:
+                        alert("unsupported message type");
+                        break;
+
+                }
+
+            }
+
             function changeChatRoom() {
                 var newChat = document.getElementById("chatroom");
                 if(newChat!=null && newChat.value != selectedChat){
@@ -46,9 +70,9 @@
             function sendMessage(){
                 var newmessage = docuemnt.getElementById("message");
                 if (newmessage!=null){
-                    console.log(newmessage);
+                    conn.send(newmessage.value);
                 }
-                return false
+                return false;
             }
 
             //whenever we land on the first page, we want to open a websocket connection

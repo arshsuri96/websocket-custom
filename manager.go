@@ -41,6 +41,9 @@ func (m *Manager) serverWs(w http.ResponseWriter, r *http.Request) {
 
 	m.addClient(client)
 
+	go client.readMessages()
+	go client.writeMessage()
+
 }
 func (m *Manager) addClient(client *Client) {
 	m.Lock()
