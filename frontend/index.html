@@ -54,9 +54,14 @@
                     default:
                         alert("unsupported message type");
                         break;
-
                 }
 
+            }
+
+            function sendEvent(eventName, payload) {
+                const event = new Event(eventName, payload);
+
+                conn.send(JSON.stringify(event));
             }
 
             function changeChatRoom() {
@@ -70,8 +75,8 @@
             function sendMessage(){
                 var newmessage = docuemnt.getElementById("message");
                 if (newmessage!=null){
-                    conn.send(newmessage.value);
-                }
+                    sendEvent("send_message", newmessage.value)
+                } 
                 return false;
             }
 
@@ -84,6 +89,13 @@
                     console.log("supports websockets");
                     //connecto ws
                     conn = new WebSocket("ws://" + document.location.host + "/ws");
+
+                    conn.onmessage = function(evt){
+                        const eventData = JSON.parse(evt.data);
+
+                        const event = Object.assign(new Event, eventData);
+                        routeEvent(event)
+                    }
                 }else{
                     alert('browser does not')
                 }

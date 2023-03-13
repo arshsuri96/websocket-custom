@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"net/http"
 	"sync"
@@ -19,12 +20,38 @@ var (
 type Manager struct {
 	Clients      ClientList
 	sync.RWMutex //many ppl connecting to the API, we need to protect the API
+
+	handlers map[string]EventHandler // we want manager to handle the events
 }
 
 // factory functions
 func Newmanager() *Manager {
-	return &Manager{
-		Clients: make(ClientList),
+	m := &Manager{
+		Clients:  make(ClientList),
+		handlers: make(map[string]EventHandler),
+	}
+
+	m.setupEventHandlers()
+	return m
+}
+
+func (m *Manager) setupEventHandlers() {
+	m.handlers[EventSendMessage] = sentmessage
+}
+
+func sentmessage(event Event, c *Client) error {
+	log.Println(event)
+	return nil
+}
+
+func (m *Manager) routeEvent(event Event, c *Client) error {
+	if handler, ok := m.handlers[event.Type]; ok {
+		if err := handler(event, c); err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("No such type")
 	}
 }
 
